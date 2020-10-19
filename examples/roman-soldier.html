@@ -44,6 +44,9 @@
             console.log(geometry)
             geometry.computeVertexNormals()
 
+            let modifier = new THREE.EdgeSplitModifier()
+            modifier.modify( geometry, Math.PI / 8 )
+
             let mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial())
             mesh.rotateX(-Math.PI / 2)
             mesh.scale.set(0.1, 0.1, 0.1)

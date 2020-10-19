@@ -1,9 +1,22 @@
-import { Geometry } from "three";
+import {BufferGeometry, Geometry} from "three";
 
-export class EdgeSplitModifier {
+export class EdgeSplitModifier
+{
 
-	constructor();
+	private _pointMap: Map<String, Array<number>>;
 
-	modify( geometry: Geometry ): void;
+	private _areas: Float32Array;
+
+
+	private _MapPoints( positions: ArrayLike<number> ): void;
+
+
+	private _ComputeFaceAreas( positions: ArrayLike<number> ): void;
+
+
+	private _EdgeSplit( indexes: Array<number>, cutOff: number ): void;
+
+
+	modify( geometry: Geometry, cutOffPoint: number ): BufferGeometry;
 
 }
