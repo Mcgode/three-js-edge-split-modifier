@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+<script src="../node_modules/three/build/three.js"></script>
+
+<script src="../node_modules/three/examples/js/loaders/STLLoader.js"></script>
+<script src="../node_modules/three/examples/js/controls/OrbitControls.js"></script>
+
+<script src="../dist/browser/three-js-edge-splitter.js"></script>
+
+<script>
+    let renderer = new THREE.WebGLRenderer();
+    let size = new THREE.Vector2(window.innerWidth, window.innerHeight);
+    renderer.setSize(size.x, size.y);
+    renderer.setClearColor(0xaaaaaa);
+    document.body.appendChild(renderer.domElement);
+
+    let scene = new THREE.Scene();
+    let camera = new THREE.PerspectiveCamera(75, size.width / size.height);
+
+    let controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.25;
+    controls.rotateSpeed = 0.35;
+    controls.minZoom = 1;
+    camera.position.set(0, 0, 5);
+
+    new THREE.STLLoader().load(
+        "roman-soldier.stl",
+
+        function (geometry)
+        {
+            console.log(geometry)
+            geometry.computeVertexNormals()
+
+            let mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial())
+            mesh.rotateX(-Math.PI / 2)
+            mesh.scale.set(0.1, 0.1, 0.1)
+            mesh.translateZ(-1.5)
+            scene.add(mesh)
+        }
+    )
+
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x444444))
+
+    let light = new THREE.DirectionalLight(0xffffff, 2)
+    light.position.set( 1, 1, 1)
+    // scene.add(light)
+
+
+    animate()
+
+
+    function animate()
+    {
+        requestAnimationFrame(animate)
+
+        renderer.render(scene, camera)
+    }
+</script>
+</body>
+</html>
