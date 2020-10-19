@@ -8,6 +8,7 @@
     "three": "^0.121.1"
   },
   "devDependencies": {
+    "dat.gui": "^0.7.7",
     "fs-extra": "^7.0.1",
     "rollup": "^0.67.1",
     "rollup-plugin-commonjs": "^9.2.0",

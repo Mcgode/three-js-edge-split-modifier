@@ -19,6 +19,8 @@
 
 <script src="../dist/browser/three-js-edge-splitter.js"></script>
 
+<script src="../node_modules/dat.gui/build/dat.gui.min.js"></script>
+
 <script>
     let renderer = new THREE.WebGLRenderer();
     let size = new THREE.Vector2(window.innerWidth, window.innerHeight);
@@ -36,6 +38,13 @@
     controls.minZoom = 1;
     camera.position.set(0, 0, 5);
 
+    let params = { splitAngle: 30 }
+
+    let modifier = new THREE.EdgeSplitModifier()
+
+    let mesh;
+    let baseGeometry
+
     new THREE.STLLoader().load(
         "roman-soldier.stl",
 
@@ -43,11 +52,11 @@
         {
             console.log(geometry)
             geometry.computeVertexNormals()
+            baseGeometry = new THREE.BufferGeometry().copy(geometry)
 
-            let modifier = new THREE.EdgeSplitModifier()
-            modifier.modify( geometry, Math.PI / 8 )
+            modifier.modify( geometry, Math.PI * params.splitAngle / 180 )
 
-            let mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial())
+            mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial())
             mesh.rotateX(-Math.PI / 2)
             mesh.scale.set(0.1, 0.1, 0.1)
             mesh.translateZ(-1.5)
@@ -71,6 +80,17 @@
 
         renderer.render(scene, camera)
     }
+
+
+    let gui = new dat.GUI({name: "Edge splitter"})
+
+    gui.add(params, "splitAngle").min(0).max(180)
+        .onFinishChange(value => {
+            mesh.geometry = modifier.modify(
+                new THREE.BufferGeometry().copy(baseGeometry),
+                Math.PI * value / 180
+            )
+        })
 </script>
 </body>
 </html>
