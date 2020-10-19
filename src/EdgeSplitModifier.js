@@ -46,38 +46,54 @@ function EdgeSplitModifier()
 
     }
 
-    this._EdgeSplit = function ( indexes, cutOff )
+    this._EdgeSplitToGroups = function( indexes, cutOff, firstIndex )
     {
 
-        let firstIndex = indexes[0]
         A.set( this._normals[3 * firstIndex], this._normals[3 * firstIndex + 1], this._normals[3 * firstIndex + 2] )
             .normalize()
 
-        let currentGroup = [firstIndex]
-        let splitGroup = []
+        let result = {
+            splitGroup: [],
+            currentGroup: []
+        }
 
-        C.copy(A).multiplyScalar(this._areas[Math.floor(firstIndex / 3)])
+        for (let j of indexes) {
 
-        for (let i = 1; i < indexes.length; i++) {
-
-            let j = indexes[i]
             B.set( this._normals[3 * j], this._normals[3 * j + 1], this._normals[3 * j + 2] )
                 .normalize()
 
             if ( B.dot(A) < cutOff )
-                splitGroup.push(j)
+                result.splitGroup.push(j)
 
-            else {
+            else
+                result.currentGroup.push(j)
 
-                currentGroup.push(j)
-                C.addScaledVector(B, this._areas[Math.floor(j / 3)])
+        }
 
-            }
+        return result
+    }
+
+    this._EdgeSplit = function ( indexes, cutOff )
+    {
+        let groupResults = []
+        for (let index of indexes)
+            groupResults.push(this._EdgeSplitToGroups(indexes, cutOff, index))
+
+        let result = groupResults[0]
+        for (let groupResult of groupResults)
+            if ( groupResult.currentGroup.length > result.currentGroup.length )
+                result = groupResult
+
+        C.set(0, 0, 0)
+        for ( let index of result.currentGroup ) {
+
+            B.set( this._normals[3 * index], this._normals[3 * index + 1], this._normals[3 * index + 2] )
+            C.addScaledVector( B, this._areas[Math.floor( index / 3 )] )
 
         }
 
         C.normalize()
-        for ( let index of currentGroup ) {
+        for ( let index of result.currentGroup ) {
 
             this._normals[3 * index] = C.x;
             this._normals[3 * index + 1] = C.y;
@@ -85,8 +101,8 @@ function EdgeSplitModifier()
 
         }
 
-        if ( splitGroup.length )
-            this._EdgeSplit( splitGroup, cutOff )
+        if ( result.splitGroup.length )
+            this._EdgeSplit( result.splitGroup, cutOff )
 
     }
 
@@ -115,7 +131,7 @@ function EdgeSplitModifier()
 
 
         for ( let [_, vertexIndexes] of this._pointMap )
-            this._EdgeSplit( vertexIndexes, Math.cos(cutOffAngle) )
+            this._EdgeSplit( vertexIndexes, Math.cos(cutOffAngle) - 0.001 )
 
         geometry.setAttribute("normal", new BufferAttribute(this._normals, 3, true))
 
