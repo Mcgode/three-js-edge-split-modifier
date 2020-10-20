@@ -7,6 +7,7 @@
         html, body {
             margin: 0;
             padding: 0;
+            overflow: hidden;
         }
     </style>
 </head>
@@ -16,6 +17,8 @@
 
 <script src="../node_modules/three/examples/js/loaders/STLLoader.js"></script>
 <script src="../node_modules/three/examples/js/controls/OrbitControls.js"></script>
+<script src="../node_modules/three/examples/js/utils/BufferGeometryUtils.js"></script>
+<!--<script src="../node_modules/three/examples/js/exporters/"-->
 
 <script src="../dist/browser/three-js-edge-splitter.js"></script>
 
@@ -51,12 +54,13 @@
         function (geometry)
         {
             console.log(geometry)
-            geometry.computeVertexNormals()
             baseGeometry = new THREE.BufferGeometry().copy(geometry)
 
-            modifier.modify( geometry, Math.PI * params.splitAngle / 180 )
+            geometry = modifier.modify( geometry, Math.PI * params.splitAngle / 180 )
+            geometry.computeVertexNormals()
 
             mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial())
+            // mesh.material = new THREE.MeshNormalMaterial()
             mesh.rotateX(-Math.PI / 2)
             mesh.scale.set(0.1, 0.1, 0.1)
             mesh.translateZ(-1.5)
@@ -90,7 +94,16 @@
                 new THREE.BufferGeometry().copy(baseGeometry),
                 Math.PI * value / 180
             )
+            mesh.geometry.computeVertexNormals()
         })
+
+
+    window.onresize = function()
+    {
+        renderer.setSize(window.innerWidth, window.innerHeight)
+        camera.aspect = window.innerWidth / window.innerHeight
+        camera.updateProjectionMatrix()
+    }
 </script>
 </body>
 </html>
