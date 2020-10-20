@@ -1,5 +1,5 @@
 {
-  "name": "three-js-edge-spliter",
+  "name": "three-js-edge-split-modifier",
   "version": "1.0.0",
   "scripts": {
     "build": "node ./build.js"

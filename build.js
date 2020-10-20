@@ -5,9 +5,6 @@ let resolve = require('rollup-plugin-node-resolve'); // require from node_module
 let terser = require('rollup-plugin-terser').terser; // minify
 let prettier = require('rollup-plugin-prettier');
 
-// clean previous build
-fs.removeSync('/dist/browser/three-js-mesh-position-materials.js')
-fs.removeSync('/dist/browser/three-js-mesh-position-materials.min.js')
 
 async function build(inputOptions, outputOptions) {
     // create a bundle
@@ -30,8 +27,8 @@ build({
     external: [ 'three' ],
 }, {
     format: 'umd',
-    name: 'THREEEdgeSplitter',
-    file: './dist/browser/three-js-edge-splitter.js',
+    name: 'THREEEdgeSplitModifier',
+    file: './dist/browser/three-js-edge-split-modifier.js',
     globals: {
         'three' : 'THREE'
     }
@@ -58,8 +55,8 @@ build({
     external: [ 'three' ],
 }, {
     format: 'umd',
-    name: 'THREEEdgeSplitter',
-    file: './dist/browser/three-js-edge-splitter.min.js',
+    name: 'THREEEdgeSplitModifier',
+    file: './dist/browser/three-js-edge-split-modifier.min.js',
     globals: {
         'three' : 'THREE'
     }

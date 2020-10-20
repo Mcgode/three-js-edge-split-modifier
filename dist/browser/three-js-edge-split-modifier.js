@@ -1,7 +1,7 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('three')) :
     typeof define === 'function' && define.amd ? define(['exports', 'three'], factory) :
-    (factory((global.THREEEdgeSplitter = {}),global.THREE));
+    (factory((global.THREEEdgeSplitModifier = {}),global.THREE));
 }(this, (function (exports,three) { 'use strict';
 
     function EdgeSplitModifier()
