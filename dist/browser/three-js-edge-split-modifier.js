@@ -12,22 +12,6 @@
         let D = new three.Vector3();
 
 
-        this._MapPoints = function () {
-
-            for ( let i = 0; i < this._positions.length; i += 3 ) {
-
-                let key = `${this._positions[i]},${this._positions[i+1]},${this._positions[i+2]}`;
-
-                if ( !this._pointMap.has( key ) )
-                    this._pointMap.set( key, [] );
-
-                this._pointMap.get( key ).push( i / 3 );
-
-            }
-
-        };
-
-
         this._ComputeNormals = function ()
         {
 
@@ -153,8 +137,6 @@
         this.modify = function ( geometry, cutOffAngle )
         {
 
-            this._pointMap = new Map();
-
             if ( !geometry.isBufferGeometry ) {
 
                 geometry = new three.BufferGeometry().fromGeometry( geometry );
@@ -164,7 +146,6 @@
 
             if ( geometry.index == null )
                 geometry = three.BufferGeometryUtils.mergeVertices( geometry );
-            // return geometry
 
 
             this._indexes = geometry.index.array;
@@ -186,15 +167,6 @@
             newPositions.set(this._positions);
             let offset = this._positions.length;
 
-            // let newNormals = new Float32Array( this._positions.length + 3 * this._splitIndexes.length )
-            //
-            // for ( let i = 0; i < this._pointToIndexMap.length; i++ ) {
-            //     let index = this._pointToIndexMap[i][0]
-            //     newNormals[3*i]   = this._normals[3*index]
-            //     newNormals[3*i+1] = this._normals[3*index+1]
-            //     newNormals[3*i+2] = this._normals[3*index+2]
-            // }
-
             let indexes = new Uint32Array( this._indexes.length );
             indexes.set( this._indexes );
 
@@ -203,24 +175,17 @@
                 let split = this._splitIndexes[i];
                 let index = this._indexes[split.original];
 
-                newPositions[offset + 3*i]   = this._positions[3*index];   //+ this._normals[3 * index];
-                newPositions[offset + 3*i+1] = this._positions[3*index+1]; //+ this._normals[3 * index + 1];
-                newPositions[offset + 3*i+2] = this._positions[3*index+2]; //+ this._normals[3 * index + 2];
-
-                // newNormals[offset + 3*i]   = this._normals[3*split.original]   //+ this._normals[3 * index];
-                // newNormals[offset + 3*i+1] = this._normals[3*split.original+1] //+ this._normals[3 * index + 1];
-                // newNormals[offset + 3*i+2] = this._normals[3*split.original+2] //+ this._normals[3 * index + 2];
+                newPositions[offset + 3*i]   = this._positions[3*index];
+                newPositions[offset + 3*i+1] = this._positions[3*index+1];
+                newPositions[offset + 3*i+2] = this._positions[3*index+2];
 
                 for ( let j of split.indexes )
                     indexes[j] = offset / 3 + i;
 
             }
 
-            // newPositions.fill(0)
-
             geometry = new three.BufferGeometry();
             geometry.setAttribute('position', new three.BufferAttribute(newPositions, 3, true));
-            // geometry.setAttribute('normal', new BufferAttribute(newNormals, 3))
             geometry.setIndex(new three.BufferAttribute(indexes, 1));
 
             return geometry
@@ -229,7 +194,8 @@
     }
 
 
-    THREE.EdgeSplitModifier = EdgeSplitModifier;
+    if (THREE != null)
+        THREE.EdgeSplitModifier = EdgeSplitModifier;
 
     exports.EdgeSplitModifier = EdgeSplitModifier;
 

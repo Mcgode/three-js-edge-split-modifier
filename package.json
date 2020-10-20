@@ -2,7 +2,7 @@
   "name": "@mcgode/three-js-edge-split-modifier",
   "author": "Max Godefroy <max@godefroy.net>",
   "description": "A geometry modifier for generating an indexed THREE.BufferGeometry, with faces split on sharp edges",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "src/EdgeSplitModifier.js",
   "scripts": {
     "build": "node ./build.js"
