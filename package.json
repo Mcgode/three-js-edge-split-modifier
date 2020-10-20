@@ -1,6 +1,9 @@
 {
   "name": "three-js-edge-split-modifier",
+  "author": "Max Godefroy <max@godefroy.net>",
+  "description": "A geometry modifier for generating an indexed THREE.BufferGeometry, with faces split on sharp edges",
   "version": "1.0.0",
+  "main": "src/EdgeSplitModifier.js",
   "scripts": {
     "build": "node ./build.js"
   },
@@ -10,10 +13,24 @@
   "devDependencies": {
     "dat.gui": "^0.7.7",
     "fs-extra": "^7.0.1",
-    "rollup": "^0.67.1",
+    "prettier": "^2.1.2",
+    "rollup": "^2.32.0",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-prettier": "^0.6.0"
-  }
+    "rollup-plugin-prettier": "^2.1.0"
+  },
+  "files": [
+    "src/*",
+    "dist/*"
+  ],
+  "repository": {
+    "url": "git+https://github.com/Mcgode/three-js-edge-split-modifier.git",
+    "type": "git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Mcgode/three-js-edge-split-modifier/issues"
+  },
+  "homepage": "https://github.com/Mcgode/three-js-edge-split-modifier#readme"
 }
