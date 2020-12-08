@@ -1,5 +1,9 @@
 # three.js edge split modifier
 
+**This library has been deprecated.**
+It was added to [three.js examples](https://threejs.org/examples/#webgl_modifier_edgesplit), 
+and will only be maintained there.
+
 This package is a geometry modifier for three.js
 
 This modifier takes a geometry as input, and outputs an indexed BufferGeometry
